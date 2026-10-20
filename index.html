@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Casa Pokemon Rack</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Katalog rak display toploader kartu TCG: custom warna, LED, dan susun deck sendiri.">
+<meta name="theme-color" content="#0a0b13">
+<meta property="og:title" content="Casa Pokemon Rack · TCG Rack">
+<meta property="og:description" content="Rak display toploader cetak 3D. Custom warna, LED, dan susun deck sendiri.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230a0b13'/%3E%3Cpath d='M32 9l6 16h17l-14 10 5 17-14-10-14 10 5-17L9 25h17z' fill='%23ffc24b'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Nunito:wght@400;600;700;800&family=Chakra+Petch:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="aura" aria-hidden="true"></div>
+
+<!-- ========== INTRO ========== -->
+<div class="intro" id="intro" role="dialog" aria-label="Pembuka katalog">
+  <button class="intro-skip" id="introSkip" type="button">Lewati</button>
+  <div class="burst" id="burst" aria-hidden="true"></div>
+  <div class="intro-inner">
+    <p class="intro-eyebrow">Rak display kartu TCG</p>
+    <h1 class="intro-logo" id="introLogo">Casa Pokemon Rack<span>TCG Rack</span></h1>
+    <button class="orb" id="orb" type="button" aria-label="Buka katalog">
+      <span class="orb-face"></span>
+      <span class="orb-latch"></span>
+    </button>
+    <p class="intro-hint" id="introHint">Ketuk orb untuk membuka katalog</p>
+  </div>
+</div>
+
+<!-- ========== HEADER ========== -->
+<header class="top">
+  <div class="top-in">
+    <button class="brand" id="brandBtn" type="button" aria-label="Ke atas">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span><b id="shopName">Casa Pokemon Rack</b><small id="shopTag">TCG Rack · cetak 3D</small></span>
+    </button>
+    <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true" aria-label="Suara">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path class="w1" d="M15.5 8.5a5 5 0 0 1 0 7"/><path class="w2" d="M19 5a10 10 0 0 1 0 14"/></svg>
+    </button>
+    <button class="icon-btn" id="cartBtn" type="button" aria-label="Keranjang">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg>
+      <span class="badge" id="cartCount" hidden>0</span>
+    </button>
+  </div>
+  <div class="themes" id="themes" role="group" aria-label="Tema elemen"></div>
+</header>
+
+<main>
+  <!-- ========== KATALOG ========== -->
+  <section class="sec" id="katalog" aria-labelledby="katalog-h">
+    <div class="sec-head">
+      <span class="eyebrow">Katalog</span>
+      <h2 id="katalog-h">Rak putar koleksimu</h2>
+      <p>Geser rak ke kiri atau kanan, atau ketuk Lumi untuk memutarnya.</p>
+    </div>
+    <div class="spinner" id="spinner">
+      <div class="spinner-base"></div>
+      <div class="spinner-pole"></div>
+      <div class="spinner-cap"></div>
+      <div class="ring" id="ring"></div>
+    </div>
+    <div class="spin-ctrl">
+      <button class="btn small ghost" id="prevBtn" type="button" aria-label="Produk sebelumnya">‹ Putar</button>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <button class="btn small ghost" id="nextBtn" type="button" aria-label="Produk berikutnya">Putar ›</button>
+    </div>
+    <article class="panel prod" id="prod" aria-live="polite"></article>
+    <p class="note" style="margin-top:10px">Harga dan ukuran di halaman ini masih contoh. Ubah di <code>assets/js/app.js</code>.</p>
+  </section>
+
+  <!-- ========== CUSTOM ========== -->
+  <section class="sec" id="custom" aria-labelledby="custom-h">
+    <div class="sec-head">
+      <span class="eyebrow">Custom</span>
+      <h2 id="custom-h">Warna, LED, dan lampu</h2>
+      <p>Pilih filamen, warna bibir rak, lalu nyalakan LED. Pratinjau berubah langsung.</p>
+    </div>
+    <div class="custom-grid">
+      <div class="rack-stage" id="stageCustom"></div>
+      <div class="opt-list" style="display:grid;gap:18px">
+        <div class="opt">
+          <div class="opt-h"><h3>Model</h3><span id="modelInfo"></span></div>
+          <div class="seg" id="modelSeg" role="group" aria-label="Model rak">
+            <button type="button" id="cus-model-tangga8" data-model="tangga8">Tangga 8</button>
+            <button type="button" id="cus-model-grid9" data-model="grid9">Grid 9</button>
+          </div>
+        </div>
+        <div class="opt">
+          <div class="opt-h"><h3>Warna badan</h3><span id="filName"></span></div>
+          <div class="swatches" id="filSw" role="radiogroup" aria-label="Warna badan"></div>
+          <div class="req-row" id="reqRow" hidden>
+            <input type="color" id="cus-hex" value="#ff8fc8" aria-label="Pilih warna request">
+            <input class="field" id="cus-hexname" type="text" maxlength="30" placeholder="Nama warna, mis. pink pastel">
+          </div>
+        </div>
+        <div class="opt">
+          <div class="opt-h"><h3>Warna bibir rak</h3><span id="lipName"></span></div>
+          <div class="swatches" id="lipSw" role="radiogroup" aria-label="Warna bibir rak"></div>
+        </div>
+        <div class="opt">
+          <div class="opt-h"><h3>Lampu LED</h3><span>strip di bawah tiap bibir</span></div>
+          <div class="pills" id="ledPills" role="radiogroup" aria-label="Lampu LED"></div>
+          <div class="req-row" id="ledRow" hidden>
+            <input type="color" id="cus-ledhex" value="#3fd1c2" aria-label="Warna LED">
+            <span class="note">Warna LED RGB bisa diganti lewat remote.</span>
+          </div>
+        </div>
+        <div class="panel toggle">
+          <div><b>Lampu sorot atas</b><small>Lampu USB kecil yang menyinari kartu dari atas</small></div>
+          <label class="switch"><input type="checkbox" id="cus-lamp"><i></i><span class="sr">Lampu sorot atas</span></label>
+        </div>
+        <label class="opt">
+          <span class="opt-h"><h3>Nama di plakat</h3><span id="nameCount">0/14</span></span>
+          <input class="field" id="cus-name" type="text" maxlength="14" placeholder="mis. KOLEKSI RAKA">
+        </label>
+        <div class="panel sum" id="sumCustom"></div>
+        <div class="btn-row">
+          <button class="btn primary" id="addCustom" type="button">+ Keranjang</button>
+          <a class="btn" href="#deck">Susun deck</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== DECK ========== -->
+  <section class="sec" id="deck" aria-labelledby="deck-h">
+    <div class="sec-head">
+      <span class="eyebrow">Build your deck</span>
+      <h2 id="deck-h">Susun kartu di rakmu</h2>
+      <p>Ketuk slot untuk memasang kartu. Warna rak dan LED mengikuti pilihanmu di bagian Custom.</p>
+    </div>
+    <div class="rack-stage" id="stageDeck"></div>
+    <div class="deck-tools">
+      <button class="btn" id="deckRandom" type="button">Lumi isi acak</button>
+      <button class="btn" id="deckClear" type="button">Kosongkan</button>
+      <button class="btn" id="deckSave" type="button">Simpan</button>
+    </div>
+    <div class="panel stats" id="deckStats"></div>
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn primary" id="deckOrder" type="button">Pesan rak dengan susunan ini</button>
+    </div>
+  </section>
+
+  <!-- ========== CARI KARTU ========== -->
+  <section class="sec" id="cari" aria-labelledby="cari-h">
+    <div class="sec-head">
+      <span class="eyebrow">Titip cari</span>
+      <h2 id="cari-h">Lagi cari kartu apa?</h2>
+      <p>Tulis kartu incaranmu. Pesanmu disusun rapi lalu dikirim ke penjual lewat WhatsApp.</p>
+    </div>
+    <form class="form" id="reqForm" novalidate>
+      <label class="lbl">Nama kartu <input class="field" id="req-name" type="text" required placeholder="mis. kartu holo favoritmu"></label>
+      <div class="two">
+        <label class="lbl">Set / seri <input class="field" id="req-set" type="text" placeholder="mis. nama set + nomor"></label>
+        <label class="lbl">Jumlah <input class="field" id="req-qty" type="number" min="1" max="99" value="1"></label>
+      </div>
+      <div class="two">
+        <label class="lbl">Kondisi
+          <select class="field" id="req-cond">
+            <option>Bebas</option>
+            <option>Raw, Near Mint</option>
+            <option>Raw, Lightly Played</option>
+            <option>Graded (PSA / BGS / CGC)</option>
+          </select>
+        </label>
+        <label class="lbl">Bahasa
+          <select class="field" id="req-lang">
+            <option>Bebas</option>
+            <option>Inggris</option>
+            <option>Jepang</option>
+            <option>Indonesia</option>
+            <option>Thailand / Korea</option>
+          </select>
+        </label>
+      </div>
+      <label class="lbl">Budget maksimal <span class="budget-out" id="budgetOut"></span>
+        <input type="range" id="req-budget" min="50000" max="5000000" step="50000" value="300000">
+      </label>
+      <div class="lbl" style="display:grid;gap:6px;font-weight:700;font-size:14px">Elemen <small>opsional, boleh lebih dari satu</small>
+        <div class="pills" id="reqEl"></div>
+      </div>
+      <label class="lbl">Catatan <textarea class="field" id="req-note" placeholder="mis. butuh cepat, boleh tukar tambah"></textarea></label>
+      <p class="note" id="reqErr" role="alert" hidden>Isi nama kartu dulu, ya.</p>
+      <button class="btn primary" type="submit">Susun permintaan</button>
+    </form>
+    <div class="panel result" id="reqResult" style="margin-top:16px" hidden></div>
+    <div class="wish" id="wish" style="margin-top:16px" hidden></div>
+  </section>
+
+  <!-- ========== BOOSTER ========== -->
+  <section class="sec" id="pack" aria-labelledby="pack-h">
+    <div class="sec-head">
+      <span class="eyebrow">Booster harian</span>
+      <h2 id="pack-h">Buka 1 pack gratis tiap hari</h2>
+      <p>Isinya kartu art original dan kode voucher. Makin langka kartunya, makin besar vouchernya.</p>
+    </div>
+    <div class="pack-zone" id="packZone"></div>
+    <p class="note" style="text-align:center">Kode voucher di template ini masih contoh. Atur di <code>VOUCHER</code> pada app.js.</p>
+  </section>
+
+  <!-- ========== INFO ========== -->
+  <section class="sec" id="info" aria-labelledby="info-h">
+    <div class="sec-head">
+      <span class="eyebrow">Info</span>
+      <h2 id="info-h">Ukuran dan cara pesan</h2>
+    </div>
+    <div class="panel size">
+      <svg viewBox="0 0 100 140" aria-hidden="true">
+        <rect x="6" y="6" width="88" height="128" rx="6" fill="none" stroke="currentColor" stroke-opacity=".45" stroke-width="3"/>
+        <rect x="14" y="16" width="72" height="100" rx="5" fill="var(--accent)" fill-opacity=".25" stroke="var(--accent)" stroke-width="2"/>
+        <text x="50" y="72" text-anchor="middle" font-size="12" fill="currentColor" font-family="Chakra Petch, monospace">63×88</text>
+      </svg>
+      <dl>
+        <dt>Toploader</dt><dd>3 × 4 inci (76 × 102 mm)</dd>
+        <dt>Tebal</dt><dd>35pt standar, rak grid maks. 3 mm</dd>
+        <dt>Kartu</dt><dd>63 × 88 mm (ukuran TCG standar)</dd>
+        <dt>Bahan</dt><dd>PLA, layer 0,2 mm</dd>
+      </dl>
+    </div>
+    <h3 style="font-size:16px;margin:22px 0 12px">Cara pesan</h3>
+    <ol class="steps">
+      <li class="panel"><div><b>Pilih rak dan warna</b><span>Atur di bagian Custom, lalu tambah ke keranjang.</span></div></li>
+      <li class="panel"><div><b>Kirim pesanan lewat WhatsApp</b><span>Pesan sudah tersusun otomatis, tinggal kirim.</span></div></li>
+      <li class="panel"><div><b>Rak dicetak</b><span>Dicetak setelah pesanan dikonfirmasi, 1–2 hari kerja.</span></div></li>
+      <li class="panel"><div><b>Dikirim</b><span>Dibungkus bubble wrap dan kardus.</span></div></li>
+    </ol>
+    <h3 style="font-size:16px;margin:22px 0 12px">Pertanyaan</h3>
+    <div class="faq">
+      <details class="panel"><summary>Apakah toploader dan kartu ikut dikirim?</summary><p>Tidak. Yang dikirim hanya raknya. Kartu di foto hanya contoh tampilan.</p></details>
+      <details class="panel"><summary>Warna request bisa apa saja?</summary><p>Bisa, selama filamennya tersedia. Penjual akan konfirmasi stok warna lewat chat sebelum mencetak.</p></details>
+      <details class="panel"><summary>LED-nya pakai daya apa?</summary><p>Kabel USB 5V, bisa dicolok ke charger HP atau power bank.</p></details>
+      <details class="panel"><summary>Bisa ditumpuk?</summary><p>Stand Tangga bisa disusun 2 ke samping dan ditumpuk sampai 4 tingkat.</p></details>
+    </div>
+    <h3 style="font-size:16px;margin:22px 0 12px">Belanja juga di</h3>
+    <div class="links" id="links"></div>
+  </section>
+</main>
+
+<p class="foot">© <span id="year"></span> <span id="footName">Casa Pokemon Rack</span>. Karakter Lumi dan semua ilustrasi kartu di halaman ini adalah desain original.</p>
+
+<!-- ========== DOCK ========== -->
+<nav class="dock" aria-label="Navigasi">
+  <div class="dock-in" id="dock">
+    <a href="#katalog" data-sec="katalog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="7" height="9" rx="1.5"/><rect x="13" y="3" width="7" height="9" rx="1.5"/><path d="M3 15h18M4 19h16"/></svg>Katalog</a>
+    <a href="#custom" data-sec="custom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.9 1.8-1.8 0-1.4-1.3-1.7-1.3-3 0-1 .8-1.7 1.8-1.7H17a4 4 0 0 0 4-4C21 6.1 17 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/></svg>Custom</a>
+    <a href="#deck" data-sec="deck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="12" height="16" rx="2"/><path d="M5 6v13a2 2 0 0 0 2 2h9"/></svg>Deck</a>
+    <a href="#cari" data-sec="cari"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Cari</a>
+    <a href="#pack" data-sec="pack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg>Pack</a>
+  </div>
+</nav>
+
+<!-- ========== LUMI ========== -->
+<div class="lumi" id="lumi">
+  <button class="lumi-btn" id="lumiBtn" type="button" aria-label="Lumi, asisten katalog">
+    <svg viewBox="0 0 70 70" aria-hidden="true"><circle class="trk" cx="35" cy="35" r="32"/><circle class="prg" id="lumiPrg" cx="35" cy="35" r="32"/></svg>
+    <span class="lumi-face"></span>
+  </button>
+  <div class="bubble hide" id="lumiBubble" role="status">
+    <p id="lumiSay"></p>
+    <div class="bubble-acts">
+      <button type="button" id="lumiAct">Putar rak</button>
+      <button type="button" id="lumiNext">Turun ↓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SHEET: PILIH KARTU ========== -->
+<div class="sheet" id="pickSheet" hidden>
+  <div class="sheet-bg" data-close></div>
+  <div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="pick-h">
+    <div class="grab"></div>
+    <div class="sheet-head"><h3 id="pick-h">Pilih kartu</h3><button class="x" type="button" data-close aria-label="Tutup">×</button></div>
+    <div class="pick-filter" id="pickFilter"></div>
+    <div class="pick-grid" id="pickGrid"></div>
+    <div class="btn-row" style="margin-top:14px"><button class="btn" id="pickEmpty" type="button">Kosongkan slot ini</button></div>
+  </div>
+</div>
+
+<!-- ========== SHEET: KERANJANG ========== -->
+<div class="sheet" id="cartSheet" hidden>
+  <div class="sheet-bg" data-close></div>
+  <div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="cart-h">
+    <div class="grab"></div>
+    <div class="sheet-head"><h3 id="cart-h">Keranjang</h3><button class="x" type="button" data-close aria-label="Tutup">×</button></div>
+    <div id="cartBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
